@@ -5,7 +5,7 @@ This module is designed for the [Strongloop Loopback](https://github.com/strongl
 
 By default `count` and `update` operations will only apply to models that are not deleted. This is overridden by specifying a defined value for either `deletedAt` or `isDeleted`.
 
-This is heavily based on the [loopback-softdelete-mixin](https://github.com/gausie/loopback-softdelete-mixin) by gausie.
+This is heavily based on the [loopback-softdelete-mixin](https://github.com/gausie/loopback-softdelete-mixin) by [Samuel Gauss](https://github.com/gausie). (Thanks!)
 
 Install
 -------
