@@ -75,7 +75,7 @@ module.exports = (Model, _options) => {
  **/
   const _count = Model.count;
   Model.count = function countDeleted(_where, ...rest) {
-    const where = _where;
+    const where = _where || {};
     if (typeof where[isDeleted] === 'undefined' &&
         typeof where[deletedAt] === 'undefined') {
       const whereNotDeleted = { and: [ where, queryNonDeleted ] };
