@@ -1,0 +1,24 @@
+{
+  "name": "loopback-archive-mixin",
+  "version": "1.0.0",
+  "description": "A mixin to archive models instead of delete them",
+  "main": "archive.js",
+  "scripts": {},
+  "keywords": [
+    "loopback",
+    "strongloop",
+    "mixin",
+    "soft",
+    "delete",
+    "destroy",
+    "archive"
+  ],
+  "author": "Chance Hudson",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gausie/loopback-archive-mixin.git"
+  },
+  "peerDependencies": {
+    "loopback-datasource-juggler": ">=2.33.2"
+  }
+}
