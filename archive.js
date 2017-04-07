@@ -1,7 +1,5 @@
 'use strict';
 
-const noop = () => {};
-
 module.exports = (Model, _options) => {
   const deletedAt = _options.deletedAt || 'deletedAt';
   const isDeleted = _options.isDeleted || 'isDeleted';
@@ -9,27 +7,35 @@ module.exports = (Model, _options) => {
   Model.defineProperty(deletedAt, {type: Date, required: false});
   Model.defineProperty(isDeleted, {type: Boolean, required: true, default: false});
 
-  Model.destroyAll = function softDestroyAll(where, cb = noop) {
+  Model.destroyAll = function softDestroyAll(where, cb) {
+    if (typeof cb !== 'function') {
+      console.log('Non-function cb in destroyAll', cb);
+      cb = err => {
+        if (!err) return;
+        throw err;
+      };
+    }
     /**
      * Context constructed based on loopback-datasource-juggler
      * destroyAll context
      **/
-    const hookState = {};
     const context = {
       Model,
       where,
-      hookState,
+      hookState: {},
       options: {}
     };
     let output;
-    return this.notifyObserversOf('before delete', context)
+    return this.notifyObserversOf('before archive', context)
       .then(() => this.updateAll(where, {
         [deletedAt]: (new Date()).toISOString(),
         [isDeleted]: true
-      }, cb))
+      }))
       .then(_output => output = _output)
-      .then(() => this.notifyObserversOf('after delete', context))
-      .then(() => output);
+      .then(() => this.notifyObserversOf('after archive', context))
+      .then(() => cb(null, output))
+      .then(() => output)
+      .catch(cb);
   };
 
   Model.remove = Model.destroyAll;
@@ -42,7 +48,7 @@ module.exports = (Model, _options) => {
   Model.removeById = Model.destroyById;
   Model.deleteById = Model.destroyById;
 
-  Model.prototype.destroy = function softDestroy(cb = noop) {
+  Model.prototype.destroy = function softDestroy(cb) {
     return Model.destroyById(this.id, cb);
   };
 
